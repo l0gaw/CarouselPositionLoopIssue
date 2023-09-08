@@ -1,25 +1,55 @@
-﻿namespace CarouselPositionLoopIssue;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input; 
+
+namespace CarouselPositionLoopIssue;
 
 public partial class MainPage : ContentPage
+{ 
+    public MainPage()
+    {
+        InitializeComponent();
+        BindingContext = new MainPageViewModel();
+    } 
+}
+
+public partial class MainPageViewModel : ObservableObject
 {
-	int count = 0;
+    [ObservableProperty]
+    ObservableCollection<string> items;
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    [ObservableProperty]
+    int position;
 
-	private void OnCounterClicked(object sender, EventArgs e)
-	{
-		count++;
+    [ObservableProperty]
+    bool loop;
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+    public MainPageViewModel()
+    {
+        Items = new ObservableCollection<string>
+        {
+            "1","2","3","4"
+        };
+    }
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
-	}
+    [RelayCommand]
+    async Task ReloadItems()
+    {
+        var currentPosition = Position;
+        Items = new ObservableCollection<string>
+        {
+            "1","2","3","4"
+        };
+        await Task.Delay(300);
+        Position = currentPosition;
+    }
+
+    [RelayCommand]
+    void EnableDisableLoop()
+    {
+        Loop = !Loop; 
+        Application.Current.MainPage.DisplayAlert("Loop Enabled", Loop.ToString(), "OK");
+    }
 }
 
 

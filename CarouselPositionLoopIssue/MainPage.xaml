@@ -1,42 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentPage x:Class="CarouselPositionLoopIssue.MainPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="CarouselPositionLoopIssue.MainPage">
-
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
-
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
-
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-
-        </VerticalStackLayout>
-    </ScrollView>
-
+             xmlns:local="clr-namespace:CarouselPositionLoopIssue"
+             x:DataType="local:MainPageViewModel">
+    <VerticalStackLayout Padding="30,0"
+                         Spacing="25"
+                         VerticalOptions="Center">
+        <CarouselView x:Name="CarouselView"
+                      HeightRequest="200"
+                      BackgroundColor="AliceBlue" 
+                      ItemsSource="{Binding Items}"
+                      Loop="{Binding Loop, Mode=TwoWay}"
+                      Position="{Binding Position, Mode=TwoWay}">
+            <CarouselView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout HeightRequest="200" VerticalOptions="Center">
+                        <Label FontSize="32" 
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding .}"
+                               VerticalTextAlignment="Center" />
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+        <Button Command="{Binding ReloadItemsCommand}" Text="Reload Items" /> 
+        <Button Command="{Binding EnableDisableLoopCommand}" Text="Enable/Disable Loop" />
+    </VerticalStackLayout>
 </ContentPage>
 
